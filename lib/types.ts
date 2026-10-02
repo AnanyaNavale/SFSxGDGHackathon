@@ -8,6 +8,11 @@ export type AnalysisResult = {
 
 export type RiskLevel = AnalysisResult["risk_level"];
 
+export type AudioChunk = {
+  mimeType: string;
+  data: string;
+};
+
 export const FALLBACK_RESULT: AnalysisResult = {
   risk_level: "caution",
   red_flags: [],

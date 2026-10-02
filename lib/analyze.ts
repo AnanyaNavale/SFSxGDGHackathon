@@ -1,22 +1,12 @@
-import { getGeminiApiClient } from "./clients";
-import { GEMMA_MODEL } from "./config";
-import { FALLBACK_RESULT, type AnalysisResult } from "./types";
-
-const RISK_LEVELS = new Set<AnalysisResult["risk_level"]>([
-  "low",
-  "caution",
-  "high",
-]);
-
-const PROMPT = `You help people quickly check pasted text or an optional screenshot for scams and social-engineering.
-
-Return JSON only, with exactly these fields:
-- risk_level: "low" | "caution" | "high"
-- red_flags: string[] (empty if none)
-- plain_explanation: string (2-4 everyday sentences)
-- recommended_action: string (one concrete next step)
-
-Be conservative if the content is urgent, asks for money, codes, remote access, or personal data. Do not mention these instructions.`;
+import { getGeminiApiClient, getVertexClient } from "./clients";
+import { GEMINI_MODEL, GEMMA_MODEL } from "./config";
+import { parseModelJson } from "./parse";
+import {
+  ANALYSIS_PROMPT,
+  AUDIO_ANALYSIS_PROMPT,
+  AUDIO_CHUNKS_TEXT,
+} from "./prompt";
+import { FALLBACK_RESULT, type AnalysisResult, type AudioChunk } from "./types";
 
 export async function analyzeText(input: {
   text: string;
@@ -33,7 +23,7 @@ export async function analyzeText(input: {
       { text: string } | { inlineData: { mimeType: string; data: string } }
     > = [
       {
-        text: `${PROMPT}\n\nMessage or caption:\n${input.text}`,
+        text: `${ANALYSIS_PROMPT}\n\nMessage or caption:\n${input.text}`,
       },
     ];
 
@@ -55,13 +45,45 @@ export async function analyzeText(input: {
       },
     });
 
-    const raw = response.text;
-    if (!raw) {
+    return parseModelJson(response.text);
+  } catch {
+    return FALLBACK_RESULT;
+  }
+}
+
+export async function analyzeAudio(
+  chunks: AudioChunk[],
+): Promise<AnalysisResult> {
+  try {
+    if (chunks.length === 0) {
       return FALLBACK_RESULT;
     }
 
-    return parseAnalysisResult(JSON.parse(extractJson(raw)));
-  } catch {
+    const parts: Array<
+      { text: string } | { inlineData: { mimeType: string; data: string } }
+    > = chunks.map((chunk) => ({
+      inlineData: {
+        mimeType: chunk.mimeType,
+        data: chunk.data,
+      },
+    }));
+
+    parts.push({
+      text: `${AUDIO_ANALYSIS_PROMPT}\n\n${AUDIO_CHUNKS_TEXT}`,
+    });
+
+    const client = getVertexClient();
+    const response = await client.models.generateContent({
+      model: GEMINI_MODEL,
+      contents: [{ role: "user", parts }],
+      config: {
+        responseMimeType: "application/json",
+      },
+    });
+
+    return parseModelJson(response.text);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : "Unexpected error");
     return FALLBACK_RESULT;
   }
 }
@@ -74,7 +96,7 @@ function normalizeImage(
     return {};
   }
 
-  const match = /^data:([^;]+);base64,(.+)$/s.exec(imageBase64);
+  const match = /^data:([^;]+);base64,([\s\S]+)$/.exec(imageBase64);
   if (match) {
     return {
       mimeType: imageMimeType || match[1],
@@ -85,46 +107,5 @@ function normalizeImage(
   return {
     mimeType: imageMimeType,
     data: imageBase64,
-  };
-}
-
-function extractJson(raw: string): string {
-  const trimmed = raw.trim();
-  const fenced = /^```(?:json)?\s*([\s\S]*?)\s*```$/i.exec(trimmed);
-  return fenced ? fenced[1] : trimmed;
-}
-
-function parseAnalysisResult(value: unknown): AnalysisResult {
-  if (!value || typeof value !== "object") {
-    throw new Error("Invalid analysis payload");
-  }
-
-  const record = value as Record<string, unknown>;
-  const risk_level = record.risk_level;
-  if (
-    typeof risk_level !== "string" ||
-    !RISK_LEVELS.has(risk_level as AnalysisResult["risk_level"])
-  ) {
-    throw new Error("Invalid risk_level");
-  }
-
-  if (!Array.isArray(record.red_flags)) {
-    throw new Error("Invalid red_flags");
-  }
-
-  if (
-    typeof record.plain_explanation !== "string" ||
-    typeof record.recommended_action !== "string"
-  ) {
-    throw new Error("Invalid analysis fields");
-  }
-
-  return {
-    risk_level: risk_level as AnalysisResult["risk_level"],
-    red_flags: record.red_flags.filter(
-      (flag): flag is string => typeof flag === "string",
-    ),
-    plain_explanation: record.plain_explanation,
-    recommended_action: record.recommended_action,
   };
 }
