@@ -12,12 +12,12 @@ export default function FamilyAlertPanel({
   level: Extract<RiskLevel, "caution" | "high">;
 }) {
   return (
-    <section className="rounded-2xl border-2 border-stone-300 bg-white p-6">
-      <p className="text-xl font-semibold text-stone-800">Demo simulation</p>
-      <p className="mt-3 text-xl leading-relaxed text-stone-900">
+    <section className="rounded-2xl border border-[#e4dfd6] bg-[#fbfaf7] p-6">
+      <p className="text-xl font-semibold text-[#52606a]">Demo simulation</p>
+      <p className="mt-3 text-xl leading-relaxed text-[#1c2430]">
         Text sent to Maria (daughter):
       </p>
-      <p className="mt-3 rounded-2xl bg-stone-100 p-4 text-xl leading-relaxed text-stone-900">
+      <p className="mt-3 rounded-2xl bg-white p-4 text-xl leading-relaxed text-[#1c2430]">
         {MESSAGES[level]}
       </p>
     </section>

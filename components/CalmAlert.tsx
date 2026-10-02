@@ -12,7 +12,7 @@ export default function CalmAlert({
   return (
     <section
       role="alert"
-      className="rounded-2xl border-2 border-orange-800 bg-orange-50 p-6 text-orange-950"
+      className="rounded-2xl border border-[#e7c9a4] bg-[#fbf6ee] p-6 text-[#6b3a12]"
     >
       <p className="text-xl font-semibold">This {subject} has warning signs</p>
       <p className="mt-3 text-3xl font-bold leading-snug">
