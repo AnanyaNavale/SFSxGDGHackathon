@@ -17,7 +17,7 @@
 
 ---
 
-> **Pause. Verify. Stay safe.**  
+> **Pause. Check. Feel confident.**  
 > Scam Shield turns confusing calls and messages into a calm risk assessment with one clear next step.
 
 ---
