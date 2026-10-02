@@ -4,11 +4,9 @@
 
 ### A calm, real-time scam-warning assistant for older adults
 
-**Gemini for live call audio · Gemma for suspicious messages · Built for SFS x GDG Hackathon**
+**Gemini for live call audio · Gemma for suspicious messages · Built for SFS x GDG AI Hackathon 2026**
 
 Created by Ananya Navale & Yoomi Kim
-Built for SFS x GDG AI Hackathon 2026
-October 2, 2026, Friday · San Francisco State University, CA
 
 <br />
 
