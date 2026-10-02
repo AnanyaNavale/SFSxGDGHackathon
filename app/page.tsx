@@ -1,25 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import CalmAlert from "@/components/CalmAlert";
+import CallMonitor from "@/components/CallMonitor";
 import MessageChecker from "@/components/MessageChecker";
 import PrivacyNote from "@/components/PrivacyNote";
-import ResultCard from "@/components/ResultCard";
-import RiskMeter from "@/components/RiskMeter";
-import { MOCK_CAUTION, MOCK_HIGH, MOCK_LOW } from "@/hooks/mockResults";
-import type { AnalysisResult } from "@/lib/types";
-
-const PREVIEWS: { label: string; result: AnalysisResult }[] = [
-  { label: "Example: looks okay", result: MOCK_LOW },
-  { label: "Example: be careful", result: MOCK_CAUTION },
-  { label: "Example: warning signs", result: MOCK_HIGH },
-];
 
 type Tab = "call" | "message";
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>("call");
-  const [preview, setPreview] = useState<AnalysisResult | null>(null);
 
   return (
     <div className="min-h-full bg-stone-50 text-stone-900">
@@ -62,30 +51,8 @@ export default function Home() {
         </div>
 
         {tab === "call" ? (
-          <section role="tabpanel" className="flex flex-col gap-6">
-            <p className="text-xl leading-relaxed">
-              Put the call on speaker, then press start. The microphone comes
-              in the next step. For now, look at an example of each result.
-            </p>
-            <div className="flex flex-col gap-3">
-              {PREVIEWS.map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() => setPreview(item.result)}
-                  className="min-h-14 rounded-2xl border-2 border-stone-400 bg-white px-6 text-left text-xl font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-            {preview ? (
-              <div className="flex flex-col gap-4">
-                <RiskMeter level={preview.risk_level} />
-                <CalmAlert result={preview} />
-                <ResultCard result={preview} />
-              </div>
-            ) : null}
+          <section role="tabpanel">
+            <CallMonitor />
           </section>
         ) : (
           <section role="tabpanel">
