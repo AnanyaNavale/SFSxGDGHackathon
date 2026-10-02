@@ -42,11 +42,16 @@ export async function analyzeText(input: {
       contents: [{ role: "user", parts }],
       config: {
         responseMimeType: "application/json",
+        temperature: 0.2,
       },
     });
 
     return parseModelJson(response.text);
-  } catch {
+  } catch (error) {
+    console.error(
+      "analyzeText failed:",
+      error instanceof Error ? error.message : "unknown error",
+    );
     return FALLBACK_RESULT;
   }
 }
