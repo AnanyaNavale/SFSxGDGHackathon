@@ -20,7 +20,7 @@ Created by Ananya Navale & Yoomi Kim
 ---
 
 > **Pause. Check. Feel confident.**  
-> Scam Shield turns confusing calls and messages into a calm risk assessment with one clear next step.
+> Scam Shield turns confusing calls and messages into a calm risk assessment with clear next steps.
 
 ---
 
