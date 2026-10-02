@@ -64,14 +64,15 @@ export default function MessageChecker() {
         onChange={(event) => setText(event.target.value)}
         rows={6}
         placeholder="Paste the message here"
-        className="w-full rounded-2xl border-2 border-stone-400 bg-white p-4 text-xl leading-relaxed text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900"
+        className="w-full rounded-2xl border-2 border-stone-400 bg-white p-4 text-xl leading-relaxed text-stone-900"
       />
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="button"
           onClick={() => checkMessage(text)}
           disabled={loading || text.trim().length === 0}
-          className="min-h-14 rounded-2xl bg-stone-900 px-6 text-xl font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900 disabled:opacity-50"
+          aria-busy={loading}
+          className="min-h-14 rounded-2xl bg-stone-900 px-6 text-xl font-semibold text-white disabled:bg-stone-300 disabled:text-stone-800"
         >
           {loading ? "Checking…" : "Check this message"}
         </button>
@@ -81,7 +82,7 @@ export default function MessageChecker() {
             setText(SCAM_SAMPLE);
             void checkMessage(SCAM_SAMPLE);
           }}
-          className="min-h-14 rounded-2xl border-2 border-stone-400 bg-white px-6 text-xl font-semibold text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900"
+          className="min-h-14 rounded-2xl border-2 border-stone-400 bg-white px-6 text-xl font-semibold text-stone-900"
         >
           Try a scam text
         </button>
@@ -91,7 +92,7 @@ export default function MessageChecker() {
             setText(NORMAL_SAMPLE);
             void checkMessage(NORMAL_SAMPLE);
           }}
-          className="min-h-14 rounded-2xl border-2 border-stone-400 bg-white px-6 text-xl font-semibold text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900"
+          className="min-h-14 rounded-2xl border-2 border-stone-400 bg-white px-6 text-xl font-semibold text-stone-900"
         >
           Try a normal text
         </button>

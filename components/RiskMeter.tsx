@@ -30,7 +30,7 @@ export default function RiskMeter({ level }: { level: RiskLevel }) {
         <span aria-hidden="true">{info.icon} </span>
         {info.label}
       </p>
-      <div className="mt-3 h-4 w-full rounded-full bg-stone-200">
+      <div className="mt-3 h-4 w-full rounded-full bg-stone-200" aria-hidden="true">
         <div
           className={`h-4 rounded-full motion-reduce:transition-none transition-all duration-700 ${info.bar}`}
         />

@@ -3,7 +3,10 @@ import type { AnalysisResult } from "@/lib/types";
 export default function ResultCard({ result }: { result: AnalysisResult }) {
   if (result.error) {
     return (
-      <section className="rounded-2xl border-2 border-stone-300 bg-stone-100 p-6 text-stone-800">
+      <section
+        role="status"
+        className="rounded-2xl border-2 border-stone-300 bg-stone-100 p-6 text-stone-900"
+      >
         <p className="text-2xl font-semibold">We couldn&apos;t check this one</p>
         <p className="mt-3 text-xl leading-relaxed">
           Please be careful and verify before acting. Don&apos;t send money or

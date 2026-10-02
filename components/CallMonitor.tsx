@@ -7,8 +7,7 @@ import RiskMeter from "@/components/RiskMeter";
 import { useCallMonitor } from "@/hooks/useCallMonitor";
 import { useSmoothedRisk } from "@/hooks/useSmoothedRisk";
 
-const buttonClass =
-  "min-h-14 rounded-2xl px-6 text-xl font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900";
+const buttonClass = "min-h-14 rounded-2xl px-6 text-xl font-semibold";
 
 export default function CallMonitor() {
   const { status, latest, analyzing, start, stop } = useCallMonitor();
@@ -54,10 +53,12 @@ export default function CallMonitor() {
         </p>
       ) : null}
       {analyzing ? (
-        <p className="text-xl text-stone-700">Checking the last few seconds.</p>
+        <p className="text-xl text-stone-800" role="status">
+          Checking the last few seconds.
+        </p>
       ) : null}
       {lastCheckFailed ? (
-        <p className="rounded-2xl bg-stone-200 px-4 py-3 text-xl text-stone-800">
+        <p className="rounded-2xl bg-stone-200 px-4 py-3 text-xl text-stone-900" role="status">
           We couldn&apos;t check the last few seconds.
         </p>
       ) : null}
@@ -66,7 +67,9 @@ export default function CallMonitor() {
       {displayed && displayed.risk_level !== "low" ? (
         <ResultCard result={displayed} />
       ) : null}
-      {displayed?.risk_level === "high" ? <FamilyAlertPanel /> : null}
+      {displayed?.risk_level === "caution" || displayed?.risk_level === "high" ? (
+        <FamilyAlertPanel level={displayed.risk_level} />
+      ) : null}
       <div className="flex flex-col gap-3 sm:flex-row">
         <button type="button" onClick={stop} className={`${buttonClass} border-2 border-stone-400 bg-white text-stone-900`}>
           Stop listening
