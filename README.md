@@ -27,7 +27,7 @@
 
 | Input | AI path | What it checks |
 |---|---|---|
-| 💬 Text, links, optional screenshots | **Gemma 4** via Gemini API | Urgency, impersonation, suspicious links, payment or code requests |
+| 💬 Text, links | **Gemma 4** via Gemini API | Urgency, impersonation, suspicious links, payment or code requests |
 | 🎙️ Live call audio | **Gemini 2.5 Flash** on Vertex AI | Pressure, secrecy, threats, payment demands, and verification-code requests |
 
 Both paths return the same result: `risk_level`, `red_flags`, `plain_explanation`, and `recommended_action`.
