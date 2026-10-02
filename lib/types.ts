@@ -6,6 +6,8 @@ export type AnalysisResult = {
   error?: boolean;
 };
 
+export type RiskLevel = AnalysisResult["risk_level"];
+
 export const FALLBACK_RESULT: AnalysisResult = {
   risk_level: "caution",
   red_flags: [],
